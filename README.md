@@ -2,6 +2,8 @@
 
 ### Formulários da pesquisa
 
-- [Formulário para Designers (pré-lançamento)](https://arthursoares-bit.github.io/pesquisa-gamedesign/designer_form.html)
+- [Formulário para Designers (pré-lançamento)](https://arthursoares-bit.github.io/pesquisa-gamedesign/form_designer.html)
 
-- [Formulário para Jogadores (pós-lançamento)](https://arthursoares-bit.github.io/pesquisa-gamedesign/jogador_form.html)
+- - [Formulário para o Time de Desenvolvedores (pré-lançamento)](https://arthursoares-bit.github.io/pesquisa-gamedesign/form_time.html)
+
+- [Formulário para Jogadores (pós-lançamento)](https://arthursoares-bit.github.io/pesquisa-gamedesign/form_jogadores.html)
