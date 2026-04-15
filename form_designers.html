@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Questionário — Expectativas de Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --accent:#534AB7; --accent-light:#EEEDFE; --accent-dark:#3C3489; --accent-mid:#AFA9EC;
+  --ink:#1a1825; --ink-mid:#4a4760; --ink-light:#8b88a8;
+  --surface:#f7f6fc; --card:#ffffff; --border:#e2e0f0;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Syne', sans-serif; background: var(--surface); color: var(--ink); min-height: 100vh; }
+.hero { background: var(--accent-dark); padding: 3rem 2rem 4rem; position: relative; overflow: hidden; }
+.hero::before { content:''; position:absolute; top:-60px; right:-60px; width:320px; height:320px; border-radius:50%; background:rgba(255,255,255,0.05); pointer-events:none; }
+.hero::after  { content:''; position:absolute; bottom:-80px; left:10%; width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,0.04); pointer-events:none; }
+.hero-inner { max-width:760px; margin:0 auto; position:relative; z-index:1; }
+.hero-badge { display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:100px; padding:5px 14px; font-family:'DM Mono',monospace; font-size:11px; color:rgba(255,255,255,0.85); letter-spacing:.08em; text-transform:uppercase; margin-bottom:1.5rem; }
+.hero-badge-dot { width:6px; height:6px; background:var(--accent-mid); border-radius:50%; }
+.hero h1 { font-size:clamp(26px,5vw,42px); font-weight:800; color:#fff; line-height:1.15; margin-bottom:1rem; letter-spacing:-.02em; }
+.hero p { font-size:15px; color:rgba(255,255,255,0.72); line-height:1.7; max-width:520px; }
+.progress-strip { background:rgba(0,0,0,0.2); padding:0 2rem; }
+.progress-strip-inner { max-width:760px; margin:0 auto; display:flex; align-items:center; gap:14px; padding:12px 0; }
+.progress-track { flex:1; height:3px; background:rgba(255,255,255,0.15); border-radius:2px; overflow:hidden; }
+.progress-fill { height:100%; background:var(--accent-mid); border-radius:2px; transition:width .4s cubic-bezier(.4,0,.2,1); width:0%; }
+.progress-label { font-family:'DM Mono',monospace; font-size:11px; color:rgba(255,255,255,0.6); white-space:nowrap; min-width:60px; text-align:right; }
+.main { max-width:760px; margin:0 auto; padding:2.5rem 2rem 4rem; }
+.section-label { font-family:'DM Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.14em; color:var(--accent); margin-bottom:1rem; display:flex; align-items:center; gap:8px; }
+.section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+.id-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:1.75rem; margin-bottom:2.5rem; display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+.field-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-mid); margin-bottom:7px; }
+.field-input { width:100%; padding:10px 14px; font-size:14px; font-family:'Syne',sans-serif; border:1.5px solid var(--border); border-radius:10px; background:var(--surface); color:var(--ink); outline:none; transition:border-color .2s,background .2s; }
+.field-input:focus { border-color:var(--accent); background:#fff; }
+.field-input::placeholder { color:var(--ink-light); }
+.questions-list { display:flex; flex-direction:column; gap:1rem; margin-bottom:2.5rem; }
+.q-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:1.5rem; transition:border-color .2s; animation:fadeUp .4s ease both; }
+.q-card:hover { border-color:var(--accent-mid); }
+.q-card.answered { border-color:var(--accent); }
+@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+.q-top { display:flex; gap:12px; align-items:flex-start; margin-bottom:1.25rem; }
+.q-num { font-family:'DM Mono',monospace; font-size:10px; font-weight:500; color:var(--accent-dark); background:var(--accent-light); border-radius:6px; padding:3px 8px; flex-shrink:0; margin-top:3px; }
+.q-content { flex:1; }
+.q-dim { font-family:'DM Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-light); margin-bottom:5px; }
+.q-text { font-size:14px; font-weight:500; line-height:1.55; color:var(--ink); }
+.scale-row { display:flex; gap:6px; }
+.scale-btn { flex:1; padding:10px 4px; border:1.5px solid var(--border); border-radius:10px; background:var(--surface); color:var(--ink-mid); font-size:13px; font-weight:600; font-family:'Syne',sans-serif; cursor:pointer; transition:all .15s; display:flex; flex-direction:column; align-items:center; gap:4px; line-height:1; }
+.scale-btn span.hint { font-size:9px; font-family:'DM Mono',monospace; font-weight:400; color:var(--ink-light); text-align:center; line-height:1.2; display:none; }
+.scale-btn:first-child span.hint, .scale-btn:last-child span.hint { display:block; }
+.scale-btn:hover { border-color:var(--accent-mid); background:var(--accent-light); color:var(--accent-dark); transform:translateY(-1px); }
+.scale-btn.selected { background:var(--accent); border-color:var(--accent); color:#fff; transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,.18); }
+.scale-btn.selected span.hint { color:rgba(255,255,255,.6); }
+.action-bar { display:flex; gap:12px; margin-bottom:2rem; }
+.btn-submit { flex:1; padding:15px 28px; font-size:15px; font-weight:700; font-family:'Syne',sans-serif; background:var(--accent); color:#fff; border:none; border-radius:12px; cursor:pointer; transition:all .2s; }
+.btn-submit:hover { background:var(--accent-dark); transform:translateY(-1px); box-shadow:0 6px 20px rgba(0,0,0,.2); }
+.btn-submit:disabled { opacity:.5; cursor:not-allowed; transform:none; box-shadow:none; }
+.btn-clear { padding:15px 20px; font-size:13px; font-family:'Syne',sans-serif; font-weight:500; background:transparent; color:var(--ink-light); border:1.5px solid var(--border); border-radius:12px; cursor:pointer; transition:all .2s; }
+.btn-clear:hover { border-color:var(--ink-light); color:var(--ink-mid); background:var(--card); }
+.status-box { border-radius:14px; padding:1.5rem; display:none; animation:fadeUp .4s ease both; text-align:center; }
+.status-box.visible { display:block; }
+.status-box.success { background:#E1F5EE; border:1px solid #9FE1CB; }
+.status-box.error   { background:#FCEBEB; border:1px solid #F09595; }
+.status-icon { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem; }
+.status-icon.ok  { background:#1D9E75; }
+.status-icon.err { background:#E24B4A; }
+.status-icon svg { width:22px; height:22px; }
+.status-title { font-size:16px; font-weight:700; margin-bottom:.5rem; }
+.status-title.ok  { color:#0F6E56; }
+.status-title.err { color:#A32D2D; }
+.status-msg { font-size:13px; font-family:'DM Mono',monospace; color:var(--ink-mid); line-height:1.6; }
+.btn-new { margin-top:1.25rem; padding:10px 24px; font-size:13px; font-weight:600; font-family:'Syne',sans-serif; background:var(--accent); color:#fff; border:none; border-radius:10px; cursor:pointer; transition:all .2s; }
+.btn-new:hover { background:var(--accent-dark); }
+.sending-overlay { display:none; align-items:center; justify-content:center; gap:10px; padding:14px; background:var(--accent-light); border-radius:12px; margin-bottom:1rem; font-size:13px; color:var(--accent-dark); font-family:'DM Mono',monospace; }
+.sending-overlay.visible { display:flex; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.spinner { width:16px; height:16px; border:2px solid var(--accent-mid); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0; }
+
+.q-card:nth-child(1) { animation-delay: 0.05s }
+.q-card:nth-child(2) { animation-delay: 0.08s }
+.q-card:nth-child(3) { animation-delay: 0.11s }
+.q-card:nth-child(4) { animation-delay: 0.14s }
+.q-card:nth-child(5) { animation-delay: 0.17s }
+.q-card:nth-child(6) { animation-delay: 0.20s }
+.q-card:nth-child(7) { animation-delay: 0.23s }
+.q-card:nth-child(8) { animation-delay: 0.26s }
+.q-card:nth-child(9) { animation-delay: 0.29s }
+.q-card:nth-child(10) { animation-delay: 0.32s }
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="hero-badge-dot"></span>Pré-lançamento · Versão Designer</div>
+    <h1>Expectativas<br>de Design</h1>
+    <p>Registre suas expectativas antes do lançamento. As respostas serão comparadas com a percepção real dos jogadores após o lançamento.</p>
+  </div>
+</div>
+<div class="progress-strip">
+  <div class="progress-strip-inner">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">0 / 10</div>
+  </div>
+</div>
+<div class="main">
+  
+  <div class="section-label">Identificação</div>
+  <div class="id-card">
+<div><div class="field-label">Nome do jogo</div><input class="field-input" id="gameName" placeholder="Ex: Jogo Alpha"/></div>
+<div><div class="field-label">Data</div><input class="field-input" type="date" id="date"/></div>
+<div><div class="field-label">Nome do designer</div><input class="field-input" id="designerName" placeholder="Ex: Ana Lima"/></div>
+<div><div class="field-label">Email do designer</div><input class="field-input" type="email" id="designerEmail" placeholder="Ex: ana@studio.com"/></div></div>
+  <div class="section-label">Perguntas — escala 1 a 5</div>
+  <div class="questions-list" id="questionsList"></div>
+  <div class="sending-overlay" id="sendingOverlay"><span class="spinner"></span> Enviando para o Google Sheets...</div>
+  <div class="action-bar">
+    <button class="btn-clear" onclick="resetForm()">Limpar tudo</button>
+    <button class="btn-submit" id="btnSubmit" onclick="submitForm()">Enviar respostas →</button>
+  </div>
+  <div class="status-box" id="statusBox"></div>
+</div>
+<script>
+const questions = [{"dim": "Clareza do objetivo", "text": "O quão claro você acredita que será para o jogador entender o objetivo principal do jogo nos primeiros minutos?"}, {"dim": "Aprendizado das mecânicas", "text": "O quão eficaz você considera a experiência inicial do jogo em ensinar suas mecânicas principais?"}, {"dim": "Envolvimento na 1ª sessão", "text": "Qual o nível esperado de envolvimento do jogador durante a primeira sessão de jogo?"}, {"dim": "Engajamento multi-sessão", "text": "O jogo oferece estímulos suficientes para manter o jogador engajado ao longo de múltiplas sessões?"}, {"dim": "Retorno após 1º dia", "text": "Qual a probabilidade do jogador retornar ao jogo após o primeiro dia?"}, {"dim": "Motivações para continuar", "text": "O jogo oferece motivações claras (recompensas, progressão, objetivos) para continuar jogando?"}, {"dim": "Feedback das ações", "text": "O jogo comunica claramente as consequências das ações do jogador (feedback visual, sonoro ou sistêmico)?"}, {"dim": "Decisões significativas", "text": "O jogo oferece decisões significativas que impactam a experiência do jogador?"}, {"dim": "Facilidade de interação", "text": "O quão fácil será para diferentes perfis de jogadores aprenderem e interagirem com o jogo?"}, {"dim": "Probabilidade de recomendar", "text": "O quão provável você acredita que o jogador recomendaria este jogo para outras pessoas?"}];
+
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1IDzI5y5JcRLxibG0qc_BrmCV0CKjtj-RDf24mxb9jy2ydexFT2FlPeQ4P49wRC5Y/exec";
+const answers = {};
+let submitting = false;
+
+function build() {
+  const list = document.getElementById('questionsList');
+  questions.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'q-card'; card.id = 'card-'+i;
+    card.innerHTML = `
+      <div class="q-top">
+        <span class="q-num">Q${i+1}</span>
+        <div class="q-content">
+          <div class="q-dim">${q.dim}</div>
+          <div class="q-text">${q.text}</div>
+        </div>
+      </div>
+      <div class="scale-row">
+        ${[1,2,3,4,5].map(v=>`
+          <button class="scale-btn" onclick="pick(${i},${v},this)">
+            ${v}<span class="hint">${v===1?'Muito<br>baixo':v===5?'Muito<br>alto':''}</span>
+          </button>`).join('')}
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+function pick(qi,val,btn) {
+  answers[qi]=val;
+  document.getElementById('card-'+qi).querySelectorAll('.scale-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('card-'+qi).classList.add('answered');
+  const n=Object.keys(answers).length;
+  document.getElementById('progressFill').style.width=Math.round(n/questions.length*100)+'%';
+  document.getElementById('progressLabel').textContent=n+' / '+questions.length;
+}
+
+function resetForm() {
+  Object.keys(answers).forEach(k=>delete answers[k]);
+  document.querySelectorAll('.scale-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.q-card').forEach(c=>c.classList.remove('answered'));
+  document.querySelectorAll('.field-input').forEach(f=>f.value='');
+  document.getElementById('date').value=today();
+  document.getElementById('statusBox').className='status-box';
+  document.getElementById('progressFill').style.width='0%';
+  document.getElementById('progressLabel').textContent='0 / '+questions.length;
+}
+
+function newResponse() { resetForm(); window.scrollTo({top:0,behavior:'smooth'}); }
+function today() { return new Date().toISOString().split('T')[0]; }
+
+async function submitForm() {
+  if(submitting) return;
+  const missing=questions.length-Object.keys(answers).length;
+  if(missing>0) { alert('Faltam '+missing+' resposta(s). Por favor responde a todas as perguntas.'); return; }
+  const gameName=document.getElementById('gameName').value.trim()||'Sem título';
+  const designerName=document.getElementById('designerName').value.trim()||'Designer';
+  const designerEmail=document.getElementById('designerEmail').value.trim();
+  const date=document.getElementById('date').value||today();
+  const scores=questions.map((_,i)=>answers[i]);
+  const payload={type:"designer",data:[gameName,designerName,designerEmail,date,...scores]};
+  submitting=true;
+  document.getElementById('btnSubmit').disabled=true;
+  document.getElementById('sendingOverlay').classList.add('visible');
+  try {
+    await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    showStatus('success','Resposta enviada!','Os dados foram registados automaticamente no Google Sheets.');
+  } catch(e) {
+    showStatus('error','Erro ao enviar','Verifica a tua ligação à internet.');
+  } finally {
+    submitting=false;
+    document.getElementById('btnSubmit').disabled=false;
+    document.getElementById('sendingOverlay').classList.remove('visible');
+  }
+}
+
+function showStatus(type,title,msg) {
+  const box=document.getElementById('statusBox');
+  box.className='status-box visible '+type;
+  box.innerHTML=`
+    <div class="status-icon ${type==='success'?'ok':'err'}">
+      <svg viewBox="0 0 22 22" fill="none">
+        ${type==='success'
+          ?'<path d="M4 11l4.5 4.5L18 6" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>'
+          :'<path d="M6 6l10 10M16 6L6 16" stroke="white" stroke-width="2.5" stroke-linecap="round"/>'}
+      </svg>
+    </div>
+    <div class="status-title ${type==='success'?'ok':'err'}">${title}</div>
+    <div class="status-msg">${msg}</div>
+    ${type==='success'?'<button class="btn-new" onclick="newResponse()">Nova resposta</button>':''}`;
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+document.getElementById('date').value=today();
+build();
+
+</script>
+</body>
+</html>
